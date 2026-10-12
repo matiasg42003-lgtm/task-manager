@@ -2,18 +2,18 @@
   min-height: 100vh;
 }
 
-.app {
+.auth-page {
   min-height: 100vh;
   display: grid;
   place-items: center;
   padding: 24px;
 }
 
-.welcome-card {
-  width: min(100%, 680px);
-  padding: 48px;
+.auth-card {
+  width: min(100%, 440px);
+  padding: 36px;
   border: 1px solid #e2e8f0;
-  border-radius: 24px;
+  border-radius: 20px;
   background: #ffffff;
   box-shadow: 0 20px 60px rgb(15 23 42 / 8%);
 }
@@ -25,38 +25,99 @@
   letter-spacing: 0.12em;
 }
 
-.welcome-card h1 {
-  margin: 16px 0;
+.auth-card h1 {
+  margin: 14px 0 10px;
   color: #0f172a;
-  font-size: clamp(36px, 7vw, 56px);
-  letter-spacing: -0.05em;
+  font-size: clamp(28px, 6vw, 36px);
+  letter-spacing: -0.04em;
 }
 
-.welcome-card p {
-  max-width: 480px;
+.auth-description {
   color: #64748b;
-  font-size: 17px;
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
-.status {
-  display: flex;
-  align-items: center;
+.auth-form {
+  display: grid;
   gap: 10px;
-  margin-top: 32px;
+  margin-top: 28px;
+}
+
+.auth-form label {
   color: #334155;
   font-size: 14px;
+  font-weight: 600;
 }
 
-.status-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: #22c55e;
+.auth-form input {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  outline: none;
+}
+
+.auth-form input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgb(99 102 241 / 15%);
+}
+
+.auth-card button {
+  width: 100%;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 10px;
+  background: #4f46e5;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-card button:hover {
+  background: #4338ca;
+}
+
+.auth-card button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.auth-switch {
+  margin-top: 24px;
+  color: #64748b;
+  font-size: 14px;
+  text-align: center;
+}
+
+.auth-card .text-button {
+  width: auto;
+  padding: 0;
+  background: transparent;
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+.form-error {
+  color: #b91c1c;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.user-email {
+  overflow-wrap: anywhere;
+  color: #334155;
+  font-size: 14px;
+  margin: 24px 0;
 }
 
 @media (max-width: 520px) {
-  .welcome-card {
-    padding: 28px;
+  .auth-page {
+    padding: 16px;
+  }
+
+  .auth-card {
+    padding: 26px;
   }
 }
