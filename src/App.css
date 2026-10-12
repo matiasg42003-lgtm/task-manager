@@ -1,0 +1,62 @@
+#root {
+  min-height: 100vh;
+}
+
+.app {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.welcome-card {
+  width: min(100%, 680px);
+  padding: 48px;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 20px 60px rgb(15 23 42 / 8%);
+}
+
+.eyebrow {
+  color: #6366f1;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.welcome-card h1 {
+  margin: 16px 0;
+  color: #0f172a;
+  font-size: clamp(36px, 7vw, 56px);
+  letter-spacing: -0.05em;
+}
+
+.welcome-card p {
+  max-width: 480px;
+  color: #64748b;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 32px;
+  color: #334155;
+  font-size: 14px;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+@media (max-width: 520px) {
+  .welcome-card {
+    padding: 28px;
+  }
+}
