@@ -29,3 +29,4 @@ dist-ssr
 !.env.example
 # Vercel local configuration
 .vercel/
+.vercel
