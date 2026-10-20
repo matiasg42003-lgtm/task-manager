@@ -1,4 +1,5 @@
 
+
 import { useState, type FormEvent } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useTasks } from '../hooks/useTasks';
@@ -23,6 +24,8 @@ export default function TasksPage() {
     const [busyTaskId, setBusyTaskId] = useState<string | null>(null);
     const [actionError, setActionError] = useState<string | null>(null);
     const [loggingOut, setLoggingOut] = useState(false);
+    const [sendingEmail, setSendingEmail] = useState(false);
+    const [emailMessage, setEmailMessage] = useState<string | null>(null);
 
     async function handleCreateTask(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -36,7 +39,9 @@ export default function TasksPage() {
         }
 
         if (cleanTitle.length > 120 || cleanDescription.length > 500) {
-            setActionError('El título admite hasta 120 caracteres y la descripción hasta 500.');
+            setActionError(
+                'El título admite hasta 120 caracteres y la descripción hasta 500.',
+            );
             return;
         }
 
@@ -48,6 +53,7 @@ export default function TasksPage() {
 
         setSaving(true);
         setActionError(null);
+        setEmailMessage(null);
 
         try {
             await addTask(input);
@@ -67,6 +73,7 @@ export default function TasksPage() {
     ) {
         setBusyTaskId(taskId);
         setActionError(null);
+        setEmailMessage(null);
 
         try {
             await toggleTask(taskId, completed);
@@ -87,6 +94,7 @@ export default function TasksPage() {
 
         setBusyTaskId(taskId);
         setActionError(null);
+        setEmailMessage(null);
 
         try {
             await removeTask(taskId);
@@ -100,6 +108,7 @@ export default function TasksPage() {
 
     async function handleLogout() {
         setLoggingOut(true);
+        setActionError(null);
 
         try {
             await logoutUser();
@@ -107,6 +116,69 @@ export default function TasksPage() {
             console.error('Error al cerrar sesión:', error);
             setActionError('No se pudo cerrar la sesión.');
             setLoggingOut(false);
+        }
+    }
+
+    async function handleSendEmail() {
+        if (!user) {
+            setActionError('Tenés que iniciar sesión para enviar el resumen.');
+            return;
+        }
+
+        setSendingEmail(true);
+        setActionError(null);
+        setEmailMessage(null);
+
+        try {
+            const idToken = await user.getIdToken();
+
+            const response = await fetch('/api/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${idToken}`,
+                },
+                body: JSON.stringify({
+                    tasks: tasks.map(({ title, completed }) => ({
+                        title,
+                        completed,
+                    })),
+                }),
+            });
+
+
+            const responseText = await response.text();
+
+            let result: { message?: string; error?: string };
+
+            try {
+                result = JSON.parse(responseText);
+            } catch {
+                throw new Error(
+                    `El servidor devolvió una respuesta inesperada (HTTP ${response.status}). Revisá los registros de Vercel.`,
+                );
+            }
+
+            if (!response.ok) {
+                throw new Error(
+                    result.error || `Error del servidor (HTTP ${response.status}).`,
+                );
+            }
+
+
+            setEmailMessage(
+                result.message || '¡Resumen enviado correctamente!',
+            );
+        } catch (error) {
+            console.error('Error al enviar el resumen:', error);
+
+            setActionError(
+                error instanceof Error
+                    ? error.message
+                    : 'No se pudo enviar el resumen. Intentá nuevamente.',
+            );
+        } finally {
+            setSendingEmail(false);
         }
     }
 
@@ -123,17 +195,33 @@ export default function TasksPage() {
                     <p className="tasks-user">{user.email}</p>
                 </div>
 
-                <button
-                    className="tasks-logout"
-                    type="button"
-                    onClick={handleLogout}
-                    disabled={loggingOut}
-                >
-                    {loggingOut ? 'Cerrando sesión...' : 'Cerrar sesión'}
-                </button>
+                <div className="tasks-header-actions">
+                    <button
+                        className="tasks-email-button"
+                        type="button"
+                        onClick={handleSendEmail}
+                        disabled={sendingEmail || loading}
+                    >
+                        {sendingEmail
+                            ? 'Enviando resumen...'
+                            : 'Enviar resumen por email'}
+                    </button>
+
+                    <button
+                        className="tasks-logout"
+                        type="button"
+                        onClick={handleLogout}
+                        disabled={loggingOut}
+                    >
+                        {loggingOut ? 'Cerrando sesión...' : 'Cerrar sesión'}
+                    </button>
+                </div>
             </header>
 
-            <section className="tasks-summary" aria-label="Resumen de tareas">
+            <section
+                className="tasks-summary"
+                aria-label="Resumen de tareas"
+            >
                 <p>
                     <strong>{tasks.length}</strong> tareas en total
                 </p>
@@ -184,6 +272,12 @@ export default function TasksPage() {
                 </p>
             )}
 
+            {emailMessage && (
+                <p className="tasks-email-success" role="status">
+                    {emailMessage}
+                </p>
+            )}
+
             <section className="tasks-panel">
                 <h2>Lista de tareas</h2>
 
@@ -192,7 +286,9 @@ export default function TasksPage() {
                 )}
 
                 {!loading && error && (
-                    <p className="tasks-error" role="alert">{error}</p>
+                    <p className="tasks-error" role="alert">
+                        {error}
+                    </p>
                 )}
 
                 {!loading && !error && tasks.length === 0 && (
@@ -215,7 +311,10 @@ export default function TasksPage() {
                                             checked={task.completed}
                                             disabled={busyTaskId === task.id}
                                             onChange={(event) =>
-                                                handleToggleTask(task.id, event.target.checked)
+                                                handleToggleTask(
+                                                    task.id,
+                                                    event.target.checked,
+                                                )
                                             }
                                         />
                                         <span>{task.title}</span>
@@ -234,7 +333,9 @@ export default function TasksPage() {
                                     disabled={busyTaskId === task.id}
                                     onClick={() => handleDeleteTask(task.id)}
                                 >
-                                    {busyTaskId === task.id ? 'Procesando...' : 'Eliminar'}
+                                    {busyTaskId === task.id
+                                        ? 'Procesando...'
+                                        : 'Eliminar'}
                                 </button>
                             </li>
                         ))}
