@@ -54,10 +54,23 @@ export default function RegisterPage({
     return (
         <main className="auth-page">
             <section className="auth-card">
-                <p className="eyebrow">TASK MANAGER</p>
-                <h1>Crear una cuenta</h1>
+                <div className="terminal-header-bar" aria-hidden="true">
+                    <div className="terminal-status-group">
+                        <span className="status-led status-led--amber"></span>
+                        <span>REGISTRATION MODULE</span>
+                    </div>
+                    <span>SYS.PROVISION // 80S</span>
+                </div>
+
+                <p className="eyebrow">
+                    <span className="terminal-chip">NEW OPERATOR</span>
+                    TASK TERMINAL
+                </p>
+                <h1>
+                    Crear una cuenta<span className="terminal-cursor" aria-hidden="true">_</span>
+                </h1>
                 <p className="auth-description">
-                    Registrate para empezar a organizar tus tareas.
+                    Registrate para empezar a organizar tus tareas en la consola.
                 </p>
 
                 <form onSubmit={handleSubmit} className="auth-form">
@@ -66,6 +79,7 @@ export default function RegisterPage({
                         id="register-email"
                         type="email"
                         autoComplete="email"
+                        placeholder="operador@terminal.sys"
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
                         required
@@ -76,6 +90,7 @@ export default function RegisterPage({
                         id="register-password"
                         type="password"
                         autoComplete="new-password"
+                        placeholder="mínimo 6 caracteres"
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
                         minLength={6}

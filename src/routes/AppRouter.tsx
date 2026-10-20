@@ -72,9 +72,20 @@ function AppRoutes() {
                 element={
                     <main className="auth-page">
                         <section className="auth-card">
-                            <h1>Página no encontrada</h1>
+                            <div className="terminal-header-bar" aria-hidden="true">
+                                <div className="terminal-status-group">
+                                    <span className="status-led status-led--amber"></span>
+                                    <span>SYSTEM ALERT</span>
+                                </div>
+                                <span>SECTOR: 404</span>
+                            </div>
+                            <p className="eyebrow">
+                                <span className="terminal-chip">ROUTE MALFUNCTION</span>
+                                NOT FOUND
+                            </p>
+                            <h1>Página no encontrada<span className="terminal-cursor" aria-hidden="true">_</span></h1>
                             <p className="auth-description">
-                                La dirección que buscás no existe.
+                                La dirección que buscás no existe o no tiene permisos en esta terminal.
                             </p>
                             <button
                                 type="button"

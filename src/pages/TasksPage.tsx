@@ -185,13 +185,28 @@ export default function TasksPage() {
     if (!user) return null;
 
     const completedCount = tasks.filter((task) => task.completed).length;
+    const completionPercentage = tasks.length > 0 ? Math.round((completedCount / tasks.length) * 100) : 0;
 
     return (
         <main className="tasks-page">
+            <div className="terminal-header-bar" aria-hidden="true">
+                <div className="terminal-status-group">
+                    <span className="status-led"></span>
+                    <span>SYSTEM ONLINE</span>
+                    <span className="terminal-chip">ARCADE CONSOLE // v2.4</span>
+                </div>
+                <span>SESSION ACTIVE // SECURE NODE</span>
+            </div>
+
             <header className="tasks-header">
                 <div>
-                    <p className="tasks-eyebrow">TU ESPACIO DE TRABAJO</p>
-                    <h1>Mis tareas</h1>
+                    <p className="tasks-eyebrow">
+                        <span className="status-led"></span>
+                        TU ESPACIO DE TRABAJO
+                    </p>
+                    <h1>
+                        Mis tareas<span className="terminal-cursor" aria-hidden="true">_</span>
+                    </h1>
                     <p className="tasks-user">{user.email}</p>
                 </div>
 
@@ -233,11 +248,41 @@ export default function TasksPage() {
                 </p>
             </section>
 
+            {tasks.length > 0 && (
+                <div
+                    style={{
+                        margin: '-12px 0 24px',
+                        padding: '10px 16px',
+                        background: 'var(--bg-panel-translucent)',
+                        border: '1px solid var(--border-subtle)',
+                        borderRadius: 'var(--radius-sm)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '12px',
+                        fontSize: '0.78rem',
+                        color: 'var(--color-text-dim)',
+                        letterSpacing: '0.06em',
+                    }}
+                    aria-hidden="true"
+                >
+                    <span>SYSTEM SYNC STATUS</span>
+                    <span style={{ color: 'var(--color-primary)', fontWeight: 700 }}>
+                        {completionPercentage}% SYNCHRONIZED
+                    </span>
+                </div>
+            )}
+
             <section className="tasks-panel">
                 <h2>Agregar una tarea</h2>
 
                 <form className="tasks-form" onSubmit={handleCreateTask}>
-                    <label htmlFor="task-title">Título</label>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <label htmlFor="task-title">Título</label>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--color-text-dim)' }} aria-hidden="true">
+                            {title.length}/120
+                        </span>
+                    </div>
                     <input
                         id="task-title"
                         type="text"
@@ -248,14 +293,19 @@ export default function TasksPage() {
                         required
                     />
 
-                    <label htmlFor="task-description">
-                        Descripción (opcional)
-                    </label>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <label htmlFor="task-description">
+                            Descripción (opcional)
+                        </label>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--color-text-dim)' }} aria-hidden="true">
+                            {description.length}/500
+                        </span>
+                    </div>
                     <textarea
                         id="task-description"
                         value={description}
                         onChange={(event) => setDescription(event.target.value)}
-                        placeholder="Agregá algún detalle..."
+                        placeholder="Agregá algún detalle técnico o nota adicional..."
                         maxLength={500}
                         rows={3}
                     />
@@ -318,6 +368,18 @@ export default function TasksPage() {
                                             }
                                         />
                                         <span>{task.title}</span>
+                                        <span
+                                            className="terminal-chip"
+                                            style={{
+                                                fontSize: '0.68rem',
+                                                marginLeft: 'auto',
+                                                borderColor: task.completed ? 'var(--color-primary-dim)' : 'var(--color-accent-amber)',
+                                                color: task.completed ? 'var(--color-primary)' : 'var(--color-accent-amber)',
+                                            }}
+                                            aria-hidden="true"
+                                        >
+                                            {task.completed ? 'COMPLETED' : 'PENDING'}
+                                        </span>
                                     </label>
 
                                     {task.description && (

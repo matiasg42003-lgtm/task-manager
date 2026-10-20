@@ -54,10 +54,23 @@ export default function LoginPage({
     return (
         <main className="auth-page">
             <section className="auth-card">
-                <p className="eyebrow">TASK MANAGER</p>
-                <h1>Bienvenido de nuevo</h1>
+                <div className="terminal-header-bar" aria-hidden="true">
+                    <div className="terminal-status-group">
+                        <span className="status-led"></span>
+                        <span>SYSTEM ONLINE</span>
+                    </div>
+                    <span>AUTH-NODE // 80S</span>
+                </div>
+
+                <p className="eyebrow">
+                    <span className="terminal-chip">SYS.ACCESS</span>
+                    TASK TERMINAL
+                </p>
+                <h1>
+                    Bienvenido de nuevo<span className="terminal-cursor" aria-hidden="true">_</span>
+                </h1>
                 <p className="auth-description">
-                    Iniciá sesión para continuar con tus tareas.
+                    Iniciá sesión para continuar con tus tareas en la consola.
                 </p>
 
                 <form onSubmit={handleSubmit} className="auth-form">
@@ -66,6 +79,7 @@ export default function LoginPage({
                         id="login-email"
                         type="email"
                         autoComplete="email"
+                        placeholder="operador@terminal.sys"
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
                         required
@@ -76,6 +90,7 @@ export default function LoginPage({
                         id="login-password"
                         type="password"
                         autoComplete="current-password"
+                        placeholder="••••••••••••"
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
                         required

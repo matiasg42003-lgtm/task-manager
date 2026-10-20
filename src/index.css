@@ -1,26 +1,159 @@
 :root {
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
-  color: #0f172a;
-  background: #f8fafc;
+  /* Color Palette - Retro Terminal / Arcade */
+  --bg-main: #080c0a;
+  --bg-deep: #040705;
+  --bg-panel: #101713;
+  --bg-panel-elevated: #151f1a;
+  --bg-panel-translucent: rgba(16, 23, 19, 0.88);
+  --bg-input: #0a110d;
+
+  --color-primary: #39ff88;
+  --color-primary-dim: #25c366;
+  --color-secondary: #19c765;
+  --color-accent-amber: #ffbf47;
+  --color-accent-amber-glow: rgba(255, 191, 71, 0.25);
+  --color-danger: #ff4d5a;
+  --color-danger-glow: rgba(255, 77, 90, 0.25);
+
+  --color-text: #d4f8e3;
+  --color-text-dim: #7ca38b;
+  --color-text-muted: #506f5c;
+
+  --border-subtle: rgba(57, 255, 136, 0.18);
+  --border-bright: rgba(57, 255, 136, 0.42);
+  --border-glow: 0 0 10px rgba(57, 255, 136, 0.15);
+
+  --glow-primary: 0 0 12px rgba(57, 255, 136, 0.35);
+  --glow-primary-subtle: 0 0 6px rgba(57, 255, 136, 0.2);
+  --glow-text: 0 0 7px rgba(57, 255, 136, 0.55);
+
+  --font-mono: "IBM Plex Mono", "Share Tech Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+
+  font-family: var(--font-mono);
+  color: var(--color-text);
+  background-color: var(--bg-main);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
 }
 
 body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
+  background-color: var(--bg-main);
+  background-image:
+    linear-gradient(rgba(57, 255, 136, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57, 255, 136, 0.025) 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 0%, rgba(25, 199, 101, 0.08) 0%, transparent 70%);
+  background-size: 24px 24px, 24px 24px, 100% 100%;
+  background-position: 0 0, 0 0, center top;
+  background-attachment: fixed;
+  color: var(--color-text);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Discreet CRT Scanlines Overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.16) 0px,
+    rgba(0, 0, 0, 0.16) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.75;
+}
+
+/* Subtle CRT Edge Vignette */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.75);
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* Retro phosphor selection */
+::selection {
+  background: var(--color-primary);
+  color: var(--bg-main);
+  text-shadow: none;
+}
+
+/* Custom retro scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+  border-left: 1px solid var(--border-subtle);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-panel-elevated);
+  border: 1px solid var(--color-primary-dim);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-dim);
 }
 
 button,
 input,
-textarea {
-  font: inherit;
+textarea,
+select {
+  font-family: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Accessibility: respect user preferences for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
