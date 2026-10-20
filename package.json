@@ -19,6 +19,11 @@
     "react-router-dom": "^7.18.4",
     "resend": "^6.34.1"
   },
+  "overrides": {
+    "jwks-rsa": {
+      "jose": "4.15.9"
+    }
+  },
   "devDependencies": {
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
