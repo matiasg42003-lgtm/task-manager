@@ -1,58 +1,120 @@
 # Task Manager
 
-Aplicación web de gestión de tareas desarrollada con React, TypeScript y Firebase. Permite a los usuarios autenticarse y administrar sus tareas desde una interfaz web.
+Aplicación web de gestión de tareas desarrollada con React, TypeScript y Firebase. Permite a los usuarios autenticarse, administrar sus tareas y enviar por correo un resumen de su estado.
 
 ## Enlaces del proyecto
 
-- **Aplicación en producción:** [Probar Task Manager](https://task-manager-qslqer6ty-matt-3a24.vercel.app/login)
-- **Código fuente:** [Repositorio en GitHub](https://github.com/matiasg42003-lgtm/task-manager)
-
-
+- **Aplicación en producción:** [Probar Task Manager](task-manager-kohl-mu-38.vercel.app)
+- **Repositorio:** [GitHub — Task Manager](https://github.com/matiasg42003-lgtm/task-manager)
 
 ## Funcionalidades
 
-- Registro e inicio de sesión de usuarios.
+- Registro e inicio de sesión mediante Firebase Authentication.
 - Rutas protegidas según el estado de autenticación.
-- Creación, visualización, finalización y eliminación de tareas.
-- Almacenamiento y sincronización de tareas con Cloud Firestore.
-- Persistencia de los datos entre sesiones.
+- Creación, visualización, edición, eliminación y finalización de tareas.
+- Persistencia de tareas en Cloud Firestore.
+- Datos asociados al usuario autenticado.
+- Sincronización de los datos con la interfaz.
 - Manejo de estados de carga y errores.
-- API serverless para integración con Resend.
-- Pruebas automatizadas de componentes de autenticación y gestión de tareas.
+- Envío de resúmenes de tareas por email mediante una función serverless.
 - Interfaz adaptable a distintos tamaños de pantalla.
+- Pruebas automatizadas con Vitest y React Testing Library.
 
 ## Tecnologías
 
-- React
-- TypeScript
-- Vite
-- Firebase Authentication
-- Cloud Firestore
-- Resend
-- Vercel
-- Vitest
-- React Testing Library
+- **Frontend:** React, TypeScript y Vite.
+- **Navegación:** React Router.
+- **Autenticación:** Firebase Authentication.
+- **Base de datos:** Cloud Firestore.
+- **Servicio de email:** Resend.
+- **Backend serverless:** Vercel Functions.
+- **Testing:** Vitest y React Testing Library.
+- **Control de versiones:** Git y GitHub.
 
 ## Arquitectura
 
-La aplicación está organizada en componentes, páginas, hooks y servicios para separar las responsabilidades.
+La aplicación separa la interfaz, la lógica de negocio y los servicios externos para facilitar el mantenimiento y la organización del código.
 
-- **Pages:** pantallas principales de la aplicación.
-- **Features:** funcionalidades organizadas por área, como autenticación.
-- **Hooks:** lógica reutilizable para acceder al usuario y administrar tareas.
-- **Services:** comunicación con Firebase y servicios externos.
-- **API:** endpoint serverless para el envío de emails.
-- **Tests:** pruebas automatizadas de funcionalidades principales.
+- `src/`: aplicación frontend.
+- `src/pages/`: páginas principales.
+- `src/features/`: funcionalidades organizadas por área.
+- `src/hooks/`: lógica reutilizable.
+- `src/services/`: servicios de Firebase y otras integraciones.
+- `api/`: funciones serverless.
+- `tests/`: pruebas automatizadas.
 
-Las tareas se almacenan asociadas al usuario autenticado en Firestore. Las credenciales privadas de los servicios externos deben mantenerse en variables de entorno y nunca exponerse en el frontend.
+Las tareas se almacenan en Cloud Firestore asociadas al usuario autenticado. La aplicación utiliza Firebase Authentication para gestionar el acceso y proteger las páginas privadas.
+
+### Flujo de envío de emails
+
+El envío de resúmenes utiliza la siguiente arquitectura:
+
+1. El usuario solicita el envío desde la interfaz.
+2. El frontend realiza una solicitud `POST` a `/api/send-email`.
+3. La función serverless de Vercel procesa la solicitud y utiliza las credenciales privadas del servidor.
+4. La función se comunica con Resend para enviar el correo.
+5. La aplicación informa al usuario del resultado de la operación.
+
+La API key de Resend no debe exponerse en el frontend.
+
+## Cuenta de demostración
+
+Se dispone de una cuenta de prueba para facilitar la evaluación de la aplicación.
+
+- **Correo de acceso:** `ejemplotest@gmail.com`
+- **Contraseña:** se comparte por separado con la persona encargada de la evaluación.
+
+La cuenta debe utilizarse exclusivamente para probar el proyecto y sus datos ficticios. No debe contener información personal ni utilizar una contraseña reutilizada de otros servicios.
+
+### Cómo probar la aplicación
+
+1. Abrir la [aplicación desplegada](https://task-manager-f9pp8x7re-matt-3a24.vercel.app/login).
+2. Iniciar sesión con las credenciales de demostración proporcionadas.
+3. Crear, editar, completar y eliminar tareas.
+4. Recargar la aplicación para comprobar la persistencia de los datos.
+5. Probar el envío del resumen por email siguiendo las indicaciones de la sección siguiente.
+
+## Envío de resúmenes por email
+
+Task Manager integra Resend mediante una función serverless desplegada en Vercel.
+
+### Configuración del proveedor
+
+La implementación utiliza **Resend en lugar de AWS SES**, el proveedor mencionado en la consigna original. La integración mantiene la arquitectura serverless: el frontend se comunica con la función de Vercel y esta se encarga de contactar al proveedor de email.
+
+### Cómo probar el envío
+
+El envío se comprobó en producción y el resumen llegó correctamente al correo autorizado de la cuenta de Resend.
+
+**Correo autorizado para las pruebas:**
+
+`matiasg.42003@gmail.com`
+
+Para comprobar esta funcionalidad:
+
+1. Iniciar sesión en Task Manager.
+2. Acceder a la sección de tareas.
+3. Utilizar la opción para enviar el resumen.
+4. Verificar que la aplicación muestre el mensaje de éxito.
+5. Comprobar la recepción del correo en el destinatario autorizado.
+
+### Limitación del entorno de prueba
+
+La cuenta de Resend utilizada actualmente tiene restricciones de envío. En esta configuración, solo permite enviar emails al destinatario autorizado indicado anteriormente.
+
+Para habilitar envíos a otros destinatarios, es necesario verificar un dominio propio en Resend y configurar una dirección remitente asociada a ese dominio.
+
+Por este motivo, el funcionamiento del envío se ha validado con el destinatario autorizado, pero no se afirma que el envío a cualquier dirección esté habilitado.
 
 ## Instalación local
 
 ### Requisitos previos
 
 - Node.js y npm.
-- Un proyecto de Firebase con Authentication y Cloud Firestore configurados.
-- Las variables de entorno necesarias para la aplicación.
+- Un proyecto de Firebase configurado.
+- Firebase Authentication habilitado.
+- Cloud Firestore habilitado.
+- Una cuenta de Resend si se desea probar el envío de emails.
 
 ### 1. Clonar el repositorio
 
@@ -69,9 +131,25 @@ npm install
 
 ### 3. Configurar las variables de entorno
 
-Crear un archivo `.env` en la raíz del proyecto y completar las variables necesarias tomando como referencia `.env.example`.
+Crear un archivo `.env` en la raíz del proyecto, tomando como referencia `.env.example`.
 
-No compartir el archivo `.env` ni subirlo al repositorio.
+Variables utilizadas:
+
+```env
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+
+RESEND_API_KEY=
+FIREBASE_SERVICE_ACCOUNT_JSON=
+```
+
+Las variables `VITE_FIREBASE_*` se utilizan para configurar Firebase en el frontend. `RESEND_API_KEY` y `FIREBASE_SERVICE_ACCOUNT_JSON` son variables del servidor y no deben exponerse al navegador.
+
+Los valores deben completarse con las credenciales correspondientes a cada servicio. No se deben publicar claves reales en el repositorio.
 
 ### 4. Iniciar el entorno de desarrollo
 
@@ -81,15 +159,17 @@ npm run dev
 
 Vite mostrará la dirección local para abrir la aplicación en el navegador.
 
-## Pruebas
+Para probar las funciones serverless localmente, utilizar el entorno de desarrollo de Vercel y configurar las variables de entorno necesarias.
 
-Ejecutar las pruebas automatizadas con:
+## Pruebas automatizadas
+
+Ejecutar la suite de pruebas:
 
 ```bash
 npm test
 ```
 
-Para ejecutar las pruebas en modo interactivo durante el desarrollo:
+Ejecutar las pruebas en modo interactivo:
 
 ```bash
 npm run test:watch
@@ -97,7 +177,7 @@ npm run test:watch
 
 ## Compilación de producción
 
-Generar la versión de producción:
+Generar la versión optimizada:
 
 ```bash
 npm run build
@@ -105,38 +185,50 @@ npm run build
 
 Los archivos compilados se generan en la carpeta `dist`.
 
-## Despliegue
+Para ejecutar el análisis estático:
 
-La aplicación está preparada para desplegarse en Vercel. La configuración de compilación utiliza Vite y la carpeta de salida `dist`.
+```bash
+npm run lint
+```
 
-Para que funcione correctamente en producción, se deben configurar las variables de entorno requeridas en Vercel, habilitar los servicios necesarios en Firebase y mantener las reglas de seguridad de Firestore correctamente configuradas.
+## Despliegue en Vercel
 
-La configuración de rutas permite que las rutas de la aplicación de una sola página (SPA) funcionen al acceder directamente o recargar el navegador.
+La aplicación está desplegada en Vercel y utiliza Vite para generar los archivos de producción.
+
+Para configurar un despliegue propio:
+
+1. Importar el repositorio de GitHub en Vercel.
+2. Configurar las variables de entorno requeridas.
+3. Verificar la configuración de Firebase Authentication y Cloud Firestore.
+4. Configurar las variables privadas necesarias para la función serverless.
+5. Realizar el despliegue y comprobar las funcionalidades principales.
+
+La configuración de rutas debe permitir el acceso y la recarga directa de las páginas de la SPA.
 
 ## Seguridad
 
-- Las claves privadas de servicios externos no deben incluirse en el código del frontend.
-- Las variables de entorno locales deben excluirse del control de versiones.
+- Las claves privadas se mantienen en variables de entorno del servidor.
+- La API key de Resend no debe incluirse en el código del frontend.
+- El archivo `.env` debe permanecer excluido del control de versiones.
+- `.env.example` contiene únicamente los nombres de las variables, sin credenciales reales.
 - Las reglas de Firestore deben restringir el acceso a los datos de cada usuario autenticado.
-- Las operaciones de backend deben validar las solicitudes y manejar los errores correspondientes.
+- Las funciones serverless deben validar las solicitudes y gestionar los errores.
+- Las credenciales de demostración no deben ser credenciales personales ni reutilizadas.
 
 ## Uso de inteligencia artificial
 
-Durante el desarrollo de este proyecto utilicé herramientas de inteligencia artificial como apoyo para el aprendizaje, la resolución de problemas y la mejora del código.
+Durante el desarrollo se utilizaron herramientas de inteligencia artificial como apoyo para el aprendizaje, la programación y la resolución de problemas.
 
-La IA se utilizó para:
+Se utilizaron para:
 
-- **Análisis y planificación:** comprender los requisitos y organizar las tareas de desarrollo en etapas.
-- **Asistencia en programación:** analizar componentes de React, TypeScript, hooks y servicios de Firebase.
-- **Depuración:** investigar errores, interpretar mensajes de la consola y evaluar posibles soluciones.
-- **Testing:** recibir orientación para diseñar y comprender pruebas automatizadas con Vitest y React Testing Library.
-- **Documentación:** organizar la estructura del proyecto y mejorar la documentación técnica.
+- Analizar requisitos y organizar las etapas de desarrollo.
+- Comprender componentes de React, TypeScript, hooks y servicios de Firebase.
+- Investigar errores de ejecución y problemas de integración.
+- Diseñar y comprender pruebas automatizadas.
+- Revisar la arquitectura y documentar las decisiones técnicas.
 
-La IA fue utilizada como herramienta de asistencia, combinando sus sugerencias con la revisión del código, las pruebas y la validación del funcionamiento de la aplicación.
-
-El objetivo fue utilizarla para aprender, comprender las decisiones técnicas y desarrollar progresivamente mayor autonomía como desarrollador.
-
+Las sugerencias se revisaron y contrastaron mediante pruebas y comprobaciones del funcionamiento de la aplicación. La IA se utilizó como herramienta de asistencia al aprendizaje y no como sustituto de la validación técnica.
 
 ## Autor
 
-Desarrollado como proyecto de práctica de desarrollo Full Stack, con foco en React, TypeScript, autenticación, persistencia de datos, testing y despliegue.
+Proyecto de práctica de desarrollo Full Stack, con foco en React, TypeScript, autenticación, persistencia de datos, integración de servicios externos, testing y despliegue.
