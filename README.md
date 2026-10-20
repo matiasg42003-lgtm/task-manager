@@ -2,6 +2,13 @@
 
 Aplicación web de gestión de tareas desarrollada con React, TypeScript y Firebase. Permite a los usuarios autenticarse y administrar sus tareas desde una interfaz web.
 
+## Enlaces del proyecto
+
+- **Aplicación en producción:** [Probar Task Manager](https://task-manager-qslqer6ty-matt-3a24.vercel.app/login)
+- **Código fuente:** [Repositorio en GitHub](https://github.com/matiasg42003-lgtm/task-manager)
+
+
+
 ## Funcionalidades
 
 - Registro e inicio de sesión de usuarios.
