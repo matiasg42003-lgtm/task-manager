@@ -4,7 +4,7 @@ Aplicación web de gestión de tareas desarrollada con React, TypeScript y Fireb
 
 ## Enlaces del proyecto
 
-- **Aplicación en producción:** [Probar Task Manager](task-manager-kohl-mu-38.vercel.app)
+- **Aplicación en producción:** [Probar Task Manager](https://task-manager-kohl-mu-38.vercel.app)
 - **Repositorio:** [GitHub — Task Manager](https://github.com/matiasg42003-lgtm/task-manager)
 
 ## Funcionalidades
@@ -20,9 +20,48 @@ Aplicación web de gestión de tareas desarrollada con React, TypeScript y Fireb
 - Interfaz adaptable a distintos tamaños de pantalla.
 - Pruebas automatizadas con Vitest y React Testing Library.
 
+## Diseño UI
+
+- **Interfaz Retro Console:** estética de terminal arcade con fondo oscuro, scanlines CRT discretas, paleta de verde fósforo y acentos ámbar.
+- **Registro e inicio de sesión:** consolas de autenticación seguras mediante Firebase Authentication con feedback de estado en tiempo real.
+- **Rutas protegidas:** navegación condicionada por el estado de autenticación de la sesión.
+- **Gestión integral de tareas:** creación, listado, cambio de estado (completada/pendiente) y eliminación con persistencia en Cloud Firestore.
+- **Telemetría y métricas en vivo:** panel de lectura digital con contadores de tareas totales, completadas y pendientes, además de un medidor porcentual de sincronización (`% SYNCHRONIZED`).
+- **Línea de comandos para nuevas tareas:** formulario con prefijos `>` y contadores de longitud máxima de caracteres en vivo.
+- **Envío de resúmenes por email:** transmisión de reportes de tareas vía endpoint serverless con Resend.
+- **Microinteracciones y animaciones sutiles:** cursor parpadeante (`_`), LEDs de estado (`● SYSTEM ONLINE`), botones con resplandor arcade y soporte para `prefers-reduced-motion`.
+- **Diseño adaptable (Responsive):** interfaz optimizada para teléfonos móviles (desde 320px), tablets y pantallas de escritorio sin desbordamientos horizontales.
+- **Pruebas automatizadas:** suite de pruebas con Vitest y React Testing Library que asegura la robustez funcional y la accesibilidad.
+
+## Identidad visual: Retro Console / Arcade Terminal
+
+El rediseño visual transforma la aplicación en una consola de comandos de una computadora arcade de los años 80, combinando ambientación retro con la ergonomía y estándares de una aplicación de productividad moderna.
+
+### Paleta de colores técnica
+- **Fondo principal (`#080C0A`):** negro azulado profundo que evoca el fondo de un monitor CRT apagado.
+- **Superficies y paneles (`#101713`):** chasis de terminal oscuro con bordes sutiles fosforescentes (`rgba(57, 255, 136, 0.18)`).
+- **Verde fósforo primario (`#39FF88`):** color distintivo de terminal para títulos principales, bordes activos, botones primarios y resaltado de selección.
+- **Verde secundario (`#19C765`):** tono complementario para métricas y tareas completadas.
+- **Ámbar (`#FFBF47`):** indicador para tareas pendientes, advertencias de terminal y cierre de sesión.
+- **Rojo peligro (`#FF4D5A`):** reservado para alertas de sistema (`[!] ERROR`) y botones de purga/eliminación.
+- **Texto secundario (`#7CA38B`):** verde grisáceo atenuado que garantiza alto contraste y descanso visual en textos largos.
+
+### Tipografía y ambientación CRT
+- **Fuentes monoespaciadas:** integración de `IBM Plex Mono` y `Share Tech Mono` (Google Fonts), asegurando alineación visual técnica y excelente legibilidad.
+- **Scanlines CRT sutiles:** textura de líneas horizontales mediante CSS puro (`repeating-linear-gradient`), diseñada para no interferir con la nitidez de los textos.
+- **Viñeta de pantalla curva:** sombreado en los extremos de la pantalla que recrea la sensación del cristal de un monitor analógico.
+- **Detalles de hardware:** indicadores luminosos con animación de pulso, cabeceras técnicas (`SYSTEM ONLINE`, `AUTH-NODE // 80S`, `OPERATOR: email`) y esquinas con corchetes en los paneles.
+
+### Experiencia de usuario y microinteracciones
+- **Botones arcade:** controles con acabado técnico, microdesplazamiento al hacer clic y resplandor al pasar el cursor.
+- **Formularios con foco fosforescente:** inputs que intensifican su contorno al recibir foco con teclado o mouse.
+- **Accesibilidad universal:** preservación de atributos semánticos, contraste de colores y reglas `@media (prefers-reduced-motion: reduce)` para desactivar transiciones a solicitud del usuario.
+
 ## Tecnologías
 
 - **Frontend:** React, TypeScript y Vite.
+- **Estilos:** CSS Vanilla modularizado con variables (tokens de diseño), animaciones ligeras y efectos visuales retro.
+- **Tipografía:** Google Fonts (`IBM Plex Mono` y `Share Tech Mono`).
 - **Navegación:** React Router.
 - **Autenticación:** Firebase Authentication.
 - **Base de datos:** Cloud Firestore.
@@ -68,7 +107,7 @@ La cuenta debe utilizarse exclusivamente para probar el proyecto y sus datos fic
 
 ### Cómo probar la aplicación
 
-1. Abrir la [aplicación desplegada](https://task-manager-f9pp8x7re-matt-3a24.vercel.app/login).
+1. Abrir la [aplicación desplegada](https://task-manager-kohl-mu-38.vercel.app).
 2. Iniciar sesión con las credenciales de demostración proporcionadas.
 3. Crear, editar, completar y eliminar tareas.
 4. Recargar la aplicación para comprobar la persistencia de los datos.
